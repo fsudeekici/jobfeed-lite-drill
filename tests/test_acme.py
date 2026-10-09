@@ -141,3 +141,35 @@ def test_v2_with_all_postings_skipped_raises():
 def test_unknown_format_raises():
     with pytest.raises(SourceError, match="unknown response format"):
         acme.parse({"api_version": "3", "items": []})
+
+
+# --- malformed v2 postings raise SourceError ---
+
+
+def _v2_payload(**changes):
+    posting = {
+        "id": 1,
+        "title": "X",
+        "locations": ["Berlin", "Germany"],
+        "published_at": "2026-10-06T09:45:00+02:00",
+        "compensation": None,
+    }
+    posting.update(changes)
+    posting = {k: v for k, v in posting.items() if v is not ...}
+    return {"api_version": "2", "data": {"postings": [posting]}, "meta": {"total": 1}}
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"title": ...},
+        {"locations": ...},
+        {"published_at": ...},
+        {"published_at": "not a date"},
+        {"locations": ["Berlin", ["Lisbon", "Portugal"]]},
+    ],
+    ids=["no-title", "no-locations", "no-date", "bad-date", "mixed-locations"],
+)
+def test_v2_malformed_posting_raises(changes):
+    with pytest.raises(SourceError, match="acme: bad posting 1"):
+        acme.parse(_v2_payload(**changes))
