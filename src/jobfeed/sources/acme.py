@@ -44,26 +44,34 @@ def _parse_v2(payload: dict[str, Any]) -> list[Job]:
         raise SourceError("acme: api_version 2 response has no 'data.postings'")
     jobs = []
     for item in postings:
-        # Only read the fields we need. 'recruiter' holds personal data.
         try:
-            posted_at = parse_date(item["published_at"])
-        except SourceError as e:
-            log.warning("acme: skipping posting %s: %s", item["id"], e)
-            continue
-        pay = item.get("compensation") or {}
-        jobs.append(
-            Job(
-                source="acme",
-                id=str(item["id"]),
-                title=item["title"].strip(),
-                location=_join_locations(item["locations"]),
-                posted_at=posted_at,
-                salary_min=pay.get("min"),
-                salary_max=pay.get("max"),
-                currency=pay.get("currency"),
-            )
-        )
+            job = _parse_v2_posting(item)
+        except (KeyError, TypeError, ValueError, AttributeError) as e:
+            raise SourceError(f"acme: bad posting {item.get('id')!r}: {e!r}") from e
+        if job is not None:
+            jobs.append(job)
     return jobs
+
+
+def _parse_v2_posting(item: dict[str, Any]) -> Job | None:
+    """Return None for a posting that is skipped with a warning."""
+    # Only read the fields we need. 'recruiter' holds personal data.
+    try:
+        posted_at = parse_date(item["published_at"])
+    except SourceError as e:
+        log.warning("acme: skipping posting %s: %s", item["id"], e)
+        return None
+    pay = item.get("compensation") or {}
+    return Job(
+        source="acme",
+        id=str(item["id"]),
+        title=item["title"].strip(),
+        location=_join_locations(item["locations"]),
+        posted_at=posted_at,
+        salary_min=pay.get("min"),
+        salary_max=pay.get("max"),
+        currency=pay.get("currency"),
+    )
 
 
 def _join_locations(locations: list) -> str:
