@@ -44,23 +44,18 @@ def _parse_v2(payload: dict[str, Any]) -> list[Job]:
         raise SourceError("acme: api_version 2 response has no 'data.postings'")
     jobs = []
     for item in postings:
+        # A bad posting is skipped. parse() raises if none is valid.
         try:
-            job = _parse_v2_posting(item)
-        except (KeyError, TypeError, ValueError, AttributeError) as e:
-            raise SourceError(f"acme: bad posting {item.get('id')!r}: {e!r}") from e
-        if job is not None:
-            jobs.append(job)
+            jobs.append(_parse_v2_posting(item))
+        except (SourceError, KeyError, TypeError, ValueError, AttributeError) as e:
+            posting_id = item.get("id") if isinstance(item, dict) else None
+            log.warning("acme: skipping posting %s: %s", posting_id, e)
     return jobs
 
 
-def _parse_v2_posting(item: dict[str, Any]) -> Job | None:
-    """Return None for a posting that is skipped with a warning."""
+def _parse_v2_posting(item: dict[str, Any]) -> Job:
     # Only read the fields we need. 'recruiter' holds personal data.
-    try:
-        posted_at = parse_date(item["published_at"])
-    except SourceError as e:
-        log.warning("acme: skipping posting %s: %s", item["id"], e)
-        return None
+    posted_at = parse_date(item["published_at"])
     pay = item.get("compensation") or {}
     return Job(
         source="acme",
