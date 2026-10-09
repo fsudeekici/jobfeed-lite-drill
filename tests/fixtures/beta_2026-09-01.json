@@ -1,0 +1,25 @@
+{
+  "results": [
+    {
+      "ref": "B-1",
+      "name": "Mobile Developer",
+      "city": "Izmir",
+      "country": "Turkey",
+      "created": "2026-09-01T09:00:00+03:00"
+    },
+    {
+      "ref": "B-2",
+      "name": "ML Engineer ",
+      "city": " Paris",
+      "country": "France",
+      "created": "2026-09-02T10:00:00+02:00"
+    },
+    {
+      "ref": "B-3",
+      "name": "Frontend Developer",
+      "city": "Madrid",
+      "country": "Spain ",
+      "created": "2026-09-03T11:00:00+02:00"
+    }
+  ]
+}

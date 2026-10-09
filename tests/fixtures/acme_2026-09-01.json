@@ -1,0 +1,51 @@
+{
+  "jobs": [
+    {
+      "id": 101,
+      "title": "Backend Engineer ",
+      "location": "Berlin , Germany",
+      "published": "2026-08-20T09:00:00+02:00",
+      "salary_min": 60000,
+      "salary_max": 75000
+    },
+    {
+      "id": 102,
+      "title": "Data Analyst",
+      "location": "Amsterdam, Netherlands",
+      "published": "2026-08-22T11:30:00+02:00",
+      "salary_min": 50000,
+      "salary_max": 62000
+    },
+    {
+      "id": 103,
+      "title": "Product Designer",
+      "location": "Remote,  Europe",
+      "published": "2026-08-25T08:15:00+00:00"
+    },
+    {
+      "id": 104,
+      "title": "QA Engineer",
+      "location": "Istanbul, Turkey",
+      "published": "2026-08-28T14:00:00+03:00",
+      "salary_min": 40000,
+      "salary_max": 48000
+    },
+    {
+      "id": 105,
+      "title": " DevOps Engineer",
+      "location": "Berlin, Germany",
+      "published": "2026-08-30T10:00:00+02:00"
+    },
+    {
+      "id": 106,
+      "title": "Support Specialist",
+      "location": "Lisbon, Portugal",
+      "published": "2026-08-31T09:45:00+01:00",
+      "salary_min": 30000,
+      "salary_max": 36000
+    }
+  ],
+  "meta": {
+    "total": 6
+  }
+}

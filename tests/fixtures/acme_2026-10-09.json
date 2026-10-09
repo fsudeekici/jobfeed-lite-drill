@@ -1,0 +1,138 @@
+{
+  "api_version": "2",
+  "data": {
+    "postings": [
+      {
+        "id": 201,
+        "title": "Backend Engineer ",
+        "locations": [
+          "Berlin",
+          "Germany"
+        ],
+        "published_at": "2026-10-01T09:00:00+02:00",
+        "compensation": {
+          "min": 62000,
+          "max": 78000,
+          "currency": "EUR"
+        },
+        "recruiter": {
+          "name": "Anna Keller",
+          "email": "anna.keller@acme.example"
+        }
+      },
+      {
+        "id": 202,
+        "title": "Data Engineer",
+        "locations": [
+          "Amsterdam",
+          "Netherlands"
+        ],
+        "published_at": "2026-10-02T10:30:00+02:00",
+        "compensation": {
+          "min": 58000,
+          "max": 70000,
+          "currency": "EUR"
+        },
+        "recruiter": {
+          "name": "Tom Berg",
+          "email": "tom.berg@acme.example"
+        }
+      },
+      {
+        "id": 203,
+        "title": "Product Designer",
+        "locations": [
+          "Remote",
+          "Europe"
+        ],
+        "published_at": "2026-10-03T08:15:00+00:00",
+        "compensation": null,
+        "recruiter": {
+          "name": "Anna Keller",
+          "email": "anna.keller@acme.example"
+        }
+      },
+      {
+        "id": 204,
+        "title": "QA Engineer",
+        "locations": [
+          "Istanbul",
+          "Turkey"
+        ],
+        "published_at": "2026-10-04T14:00:00+03:00",
+        "compensation": {
+          "min": 42000,
+          "max": 50000,
+          "currency": "EUR"
+        },
+        "recruiter": {
+          "name": "Selin Aydin",
+          "email": "selin.aydin@acme.example"
+        }
+      },
+      {
+        "id": 205,
+        "title": "Site Reliability Engineer",
+        "locations": [
+          [
+            "Berlin",
+            "Germany"
+          ],
+          [
+            "Lisbon",
+            "Portugal"
+          ]
+        ],
+        "published_at": "2026-10-05T10:00:00+02:00",
+        "compensation": {
+          "min": 70000,
+          "max": 90000,
+          "currency": "EUR"
+        },
+        "recruiter": {
+          "name": "Tom Berg",
+          "email": "tom.berg@acme.example"
+        }
+      },
+      {
+        "id": 206,
+        "title": "Support Specialist",
+        "locations": [
+          "Lisbon",
+          "Portugal"
+        ],
+        "published_at": "2026-10-06T09:45:00",
+        "compensation": {
+          "min": 31000,
+          "max": 37000,
+          "currency": "EUR"
+        },
+        "recruiter": {
+          "name": "Selin Aydin",
+          "email": "selin.aydin@acme.example"
+        }
+      },
+      {
+        "id": 207,
+        "title": "Sales Engineer",
+        "locations": [
+          "London",
+          "United Kingdom"
+        ],
+        "published_at": "2026-10-07T12:00:00+01:00",
+        "compensation": {
+          "min": 55000,
+          "max": 65000,
+          "currency": "GBP"
+        },
+        "recruiter": {
+          "name": "Anna Keller",
+          "email": "anna.keller@acme.example"
+        }
+      }
+    ]
+  },
+  "meta": {
+    "total": 7
+  }
+}
