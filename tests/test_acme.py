@@ -141,3 +141,53 @@ def test_v2_with_all_postings_skipped_raises():
 def test_unknown_format_raises():
     with pytest.raises(SourceError, match="unknown response format"):
         acme.parse({"api_version": "3", "items": []})
+
+
+# --- malformed v2 postings are skipped with a warning ---
+
+
+GOOD_POSTING = {
+    "id": 1,
+    "title": "X",
+    "locations": ["Berlin", "Germany"],
+    "published_at": "2026-10-06T09:45:00+02:00",
+    "compensation": None,
+}
+
+
+def _v2_payload(*postings):
+    return {"api_version": "2", "data": {"postings": list(postings)}, "meta": {"total": len(postings)}}
+
+
+def _bad_posting(changes):
+    posting = {**GOOD_POSTING, "id": 2, **changes}
+    return {k: v for k, v in posting.items() if v is not ...}
+
+
+BAD_POSTINGS = pytest.mark.parametrize(
+    "changes",
+    [
+        {"title": ...},
+        {"locations": ...},
+        {"published_at": ...},
+        {"published_at": "not a date"},
+        {"locations": ["Berlin", ["Lisbon", "Portugal"]]},
+    ],
+    ids=["no-title", "no-locations", "no-date", "bad-date", "mixed-locations"],
+)
+
+
+@BAD_POSTINGS
+def test_v2_malformed_posting_is_skipped_with_warning(changes, caplog):
+    with caplog.at_level(logging.WARNING, logger="jobfeed.sources.acme"):
+        jobs = acme.parse(_v2_payload(GOOD_POSTING, _bad_posting(changes)))
+    assert [j.id for j in jobs] == ["1"]
+    warnings = [r for r in caplog.records if r.levelno == logging.WARNING]
+    assert len(warnings) == 1
+    assert "skipping posting 2" in warnings[0].getMessage()
+
+
+@BAD_POSTINGS
+def test_v2_only_malformed_postings_raises(changes):
+    with pytest.raises(SourceError, match="0 jobs"):
+        acme.parse(_v2_payload(_bad_posting(changes)))
