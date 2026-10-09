@@ -50,7 +50,7 @@ def test_v2_parses_all_valid_jobs():
     payload = json.loads(NEW.read_text())
     jobs = acme.parse(payload)
     # 7 postings, 206 is skipped because its date has no timezone
-    assert payload["meta"]["total"] == 7
+    assert len(jobs) == payload["meta"]["total"] - 1
     assert sorted(j.id for j in jobs) == ["201", "202", "203", "204", "205", "207"]
 
 
@@ -89,13 +89,27 @@ def test_v2_date_without_timezone_is_skipped_with_warning(caplog):
     assert "206" in warnings[0].getMessage()
 
 
+JOB_FIELDS = {
+    "source", "id", "title", "location", "posted_at",
+    "salary_min", "salary_max", "currency",
+}
+
+
 def test_v2_no_personal_data(caplog):
+    # Read personal data from the fixture so it is never written in this file.
+    postings = json.loads(NEW.read_text())["data"]["postings"]
+    personal = {p["recruiter"][k] for p in postings for k in ("name", "email")}
+    assert personal
+
     with caplog.at_level(logging.DEBUG):
         jobs = acme.parse_file(str(NEW))
+    assert len(jobs) == 6
     for job in jobs:
-        assert "recruiter" not in asdict(job)
-        assert "@" not in repr(job)
-    assert "@" not in caplog.text
+        # A new Job field must be reviewed for personal data before it is added here.
+        assert set(asdict(job)) == JOB_FIELDS
+        # any() keeps pytest from printing the personal data on failure.
+        assert not any(v in repr(job) for v in personal), f"personal data in job {job.id}"
+    assert not any(v in caplog.text for v in personal), "personal data in logs"
 
 
 # --- never return 0 jobs silently ---
