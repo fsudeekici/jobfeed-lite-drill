@@ -11,3 +11,4 @@ class Job:
     posted_at: datetime
     salary_min: int | None = None
     salary_max: int | None = None
+    currency: str | None = None
